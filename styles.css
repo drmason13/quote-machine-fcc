@@ -23,7 +23,7 @@ button {
 }
 .quote-box {
   width: 90%;
-  font-size: 120%;
+  font-size: 90%;
   flex: 4;
   align-self: center;
   display: flex;

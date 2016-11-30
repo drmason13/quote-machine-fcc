@@ -16,7 +16,7 @@ $('document').ready(function () {
   function calculateFontSize(chars) {
     // the magic formula - magic numbers alert!
 
-    return (3 / 2) * (9 - Math.log2(chars));
+    return (11 - Math.log2(chars));
   }
 
   function setFontSize(target, chars) {
@@ -31,7 +31,7 @@ $('document').ready(function () {
   // handles both parsing the quote data and updating the dom
     var nextQuote = quoteStore.pop(),
         //quote
-      nextQuoteText = nextQuote.content.slice(3, -5).replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&"),
+      nextQuoteText = nextQuote.content.slice(3, -5).replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&").replace(/&#163;/g, "£").replace(/&#36;/g, "$").replace(/&#37;/g, "%"),
         //author
       nextQuoteAuthor = nextQuote.title.replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&");
     setFontSize(quoteTarget, nextQuoteText.length);
