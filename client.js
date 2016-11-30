@@ -3,8 +3,10 @@ $('document').ready(function () {
   var quoteTarget = $('#quote'),
     authorTarget = $('#author'),
     nextButton = $('#next'),
+    tweetButton = $('#tweet'),
     quoteStore = [],
-    url = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=';
+    url = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=',
+    tweetUrl = 'https://twitter.com/intent/tweet?hashtags=design&related=freecodecamp&text=';
 
   //codepen web hack for https -> http CORS
   url = 'https://crossorigin.me/' + url;
@@ -33,13 +35,15 @@ $('document').ready(function () {
         //quote
       nextQuoteText = nextQuote.content.slice(3, -5).replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&").replace(/&#163;/g, "£").replace(/&#36;/g, "$").replace(/&#37;/g, "%"),
         //author
-      nextQuoteAuthor = nextQuote.title.replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&");
+      nextQuoteAuthor = nextQuote.title.replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&").replace(/<br \/>/g, "\n");
     setFontSize(quoteTarget, nextQuoteText.length);
     setFontSize(authorTarget, nextQuoteAuthor.length);
     quoteTarget.text(nextQuoteText);
     authorTarget.text("- " + nextQuoteAuthor);
     quoteTarget.fadeIn({ queue: true });
     authorTarget.fadeIn({ queue: true });
+    // tweet
+    tweetButton.attr('href', tweetUrl + quoteTarget.text() + authorTarget.text());
   }
 
   function updateQuoteStore(data, callback) {

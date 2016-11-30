@@ -15,11 +15,12 @@ button {
   background: none;
   border: none;
 }
-#tweet {
-  color: #59d0ea;
-}
 #next {
   color: #eae45b;
+}
+#tweet {
+  color: #59d0ea;
+  text-decoration: none;
 }
 .quote-box {
   width: 90%;
