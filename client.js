@@ -33,9 +33,9 @@ $('document').ready(function () {
   // handles both parsing the quote data and updating the dom
     var nextQuote = quoteStore.pop(),
         //quote
-      nextQuoteText = nextQuote.content.slice(3, -5).replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&").replace(/&#163;/g, "£").replace(/&#36;/g, "$").replace(/&#37;/g, "%"),
+      nextQuoteText = nextQuote.content.slice(3, -5).replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&").replace(/&#163;/g, "£").replace(/&#36;/g, "$").replace(/&#37;/g, "%").replace(/&#\d{1,4}|<[^>]*>/g,""),
         //author
-      nextQuoteAuthor = nextQuote.title.replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&").replace(/<br \/>/g, "\n");
+      nextQuoteAuthor = nextQuote.title.replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&").replace(/<br \/>/g, "\n").replace(/&#\d{1,4}|<[^>]*>/g,"");
     setFontSize(quoteTarget, nextQuoteText.length);
     setFontSize(authorTarget, nextQuoteAuthor.length);
     quoteTarget.text(nextQuoteText);
