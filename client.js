@@ -1,85 +1,64 @@
+var quoteStore = [],
+  requests = 0,
+  requesting = false,
+  url = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=',
+  tweetUrl = 'https://twitter.com/intent/tweet?hashtags=design&related=freecodecamp&text=';
+  //codepen web hack for https -> http CORS
+  //url = 'https://crossorigin.me/' + url;
+
+function Quote(text, author) {
+  this.text = text;
+  this.author = author;
+}
+
 $('document').ready(function () {
   'use strict';
-  var quoteTarget = $('#quote'),
+  var quoteBox = $('.quote-box'),
     authorTarget = $('#author'),
     nextButton = $('#next'),
-    tweetButton = $('#tweet'),
-    quoteStore = [],
-    url = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=',
-    tweetUrl = 'https://twitter.com/intent/tweet?hashtags=design&related=freecodecamp&text=';
+    tweetButton = $('#tweet');
 
-  //codepen web hack for https -> http CORS
-  url = 'https://crossorigin.me/' + url;
+  Quote.prototype.drawSelf = function () {
+    quoteBox.css({ fontSize: 11 - Math.log2(this.text.length + this.author.length) + 'em' });
+    quoteBox.find('.quote').remove();
+    quoteBox.prepend(this.text);
+    quoteBox.find('p').not('#author').addClass('quote scale-text');
+    authorTarget.text(this.author);
+    var currentQuote = quoteBox.find('.quote').filter(':visible');
+    tweetButton.attr('href', tweetUrl + currentQuote.text() + " " + authorTarget.text());
+  };
 
-  function setURL(howMany) {
-
-    return url + howMany.toString();
-  }
-  function calculateFontSize(chars) {
-    // the magic formula - magic numbers alert!
-
-    return (11 - Math.log2(chars));
-  }
-
-  function setFontSize(target, chars) {
-    // set font size of quoteTarget using Jquery
-    // set font size of authorTarget using Jquery
-
-    target.css({
-      fontSize: calculateFontSize(chars) + "em"
-    });
-  }
-  function drawQuote() {
-  // handles both parsing the quote data and updating the dom
-    var nextQuote = quoteStore.pop(),
-        //quote
-      nextQuoteText = nextQuote.content.slice(3, -5).replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&").replace(/&#163;/g, "£").replace(/&#36;/g, "$").replace(/&#37;/g, "%").replace(/&#\d{1,4}|<[^>]*>/g,""),
-        //author
-      nextQuoteAuthor = nextQuote.title.replace(/&#821[67];|&#39;/g, "'").replace(/&#8230;/g, "...").replace(/&#821[12];/g, "-").replace(/&#822[01];|&#34;/g, '"').replace(/&#33;/g, "!").replace(/&#038;/g, "&").replace(/<br \/>/g, "\n").replace(/&#\d{1,4}|<[^>]*>/g,"");
-    setFontSize(quoteTarget, nextQuoteText.length);
-    setFontSize(authorTarget, nextQuoteAuthor.length);
-    quoteTarget.text(nextQuoteText);
-    authorTarget.text("- " + nextQuoteAuthor);
-    quoteTarget.fadeIn({ queue: true });
-    authorTarget.fadeIn({ queue: true });
-    // tweet
-    tweetButton.attr('href', tweetUrl + quoteTarget.text() + authorTarget.text());
-  }
-
-  function updateQuoteStore(data, callback) {
-    // called from ajax success
-    quoteStore = data;
-    callback();
-  }
-
-  function requestQuote() {
-    // make an Ajax request, then update quoteStore
-    var tempUrl = setURL(5);
+  function requestQuotes(howMany) {
+    requests += 1;
+    requesting = true;
     $.ajax(
       {
-        url: tempUrl,
+        url: "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=" + howMany.toString(),
         method: 'GET',
-        async: true,
         dataType: 'json',
         cache: false,
-        success: function (data) {
-          updateQuoteStore(data, drawQuote);
+        success: function (response) {
+          for (var i = 0; i < response.length; i++){
+            quoteStore.push(new Quote(response[i].content, response[i].title))
+          }
+        requests -= 1;
+        if (requests == 0) { requesting = false; }
         }
       }
     );
   }
 
   function clickHandler() {
-    // if quoteStore not empty -> drawQuote
-    // else requestQuote
+    // if there are quotes in the quoteStore, display one, then replenish the store by requesting another quote
     if (quoteStore.length) {
-      drawQuote();
-    } else {
-      quoteTarget.fadeOut({ queue: false });
-      authorTarget.fadeOut({ queue: false });
-      requestQuote();
+      quoteStore.pop().drawSelf();
+      requestQuotes(1);
+    }
+    // if there are 1 or fewer quotes in the store, make an Ajax request for more.
+    if (!(requesting) && quoteStore.length <= 1) {
+      requestQuotes(3);
     }
   }
-  clickHandler();
+  requestQuotes(3);
   nextButton.on('click', clickHandler);
 });
