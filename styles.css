@@ -3,50 +3,66 @@ html, main {
   margin: 0
 }
 body {
-  height:95%;
+  height:90%;
   background-color: #333;
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column;
   justify-content: center;
   align-items: center;
   color: #dfdfdf;
+  font-family: sans-serif;
 }
 button {
   background: none;
   border: none;
+  border-radius: 10px;
+}
+a {
+  background: none;
+  border: none;
+  border-radius: 10px;
 }
 #next {
   color: #eae45b;
+  transition: all 0.3s;
+}
+#next:hover {
+  background: #706b0f;
+}
+#next:active {
+  background: #c3ab0f;
 }
 #tweet {
   color: #59d0ea;
-  text-decoration: none;
+  transition: all 0.3s;
+  padding: 0px 8px;
+}
+#tweet:hover {
+  background: #005766;
+}
+#tweet:active {
+  background: #0088ac;
 }
 .quote-box {
   width: 90%;
-  font-size: 90%;
+  font-size: 10%;
   flex: 4;
   align-self: center;
-  display: flex;
-  flex-flow: column wrap;
+  flex-flow: column;
   justify-content: center;
   align-items: center;
 }
 .footer {
   height: 10%;
-  font-size: 60%;
+  font-size: 200%;
   width: 100%;
   display: flex;
   flex-flow: row;
   justify-content: space-around;
   align-items: center;
 }
-#author-box {
-  font-size: 50%;
-  flex: 1;
-  justify-content: flex-end;
-}
 #author {
+  align-self: flex-end;
   font-style: italic;
   margin-right: 5%;
 }
@@ -54,5 +70,8 @@ button {
   font-size: calc(1vw + 1vh);
 }
 .scale-text {
-  font-size: 4em;
+  font-size: 1em;
+}
+.align-right {
+  text-align: right;
 }
