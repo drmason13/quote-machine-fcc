@@ -3,8 +3,9 @@ var quoteStore = [],
   requesting = false,
   url = 'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=',
   tweetUrl = 'https://twitter.com/intent/tweet?hashtags=design&related=freecodecamp&text=';
-  //codepen web hack for https -> http CORS
+  //codepen web hack(s) for https -> http CORS
   //url = 'https://crossorigin.me/' + url;
+  //url = 'https://cors-anywhere.herokuapp.com/' + url;
 
 function Quote(text, author) {
   this.text = text;
